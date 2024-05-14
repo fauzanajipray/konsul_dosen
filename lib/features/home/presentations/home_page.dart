@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:konsul_dosen/widgets/my_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,6 +12,28 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('Hello World'),
+            Container(
+              padding: const EdgeInsets.only(top: 20),
+              width: 200,
+              height: 80,
+              child: MyButton(
+                onPressed: () {},
+                text: 'Logout',
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
