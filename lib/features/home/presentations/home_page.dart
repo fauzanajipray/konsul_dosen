@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
 import 'package:konsul_dosen/widgets/my_button.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,7 +28,9 @@ class _HomePageState extends State<HomePage> {
               width: 200,
               height: 80,
               child: MyButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.read<AuthCubit>().setUnauthenticated();
+                },
                 text: 'Logout',
               ),
             )

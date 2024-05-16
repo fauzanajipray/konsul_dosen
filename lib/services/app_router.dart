@@ -2,11 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
+import 'package:konsul_dosen/features/auth/cubit/auth_state.dart';
+import 'package:konsul_dosen/features/auth/presentations/sign_in_page.dart';
+import 'package:konsul_dosen/features/auth/presentations/sign_up_page.dart';
 import 'package:konsul_dosen/features/home/presentations/home_page.dart';
 import 'package:konsul_dosen/widgets/bottom_navigation_page.dart';
 
 class AppRouter {
   static late final GoRouter _router;
+  late final AuthCubit _authCubit;
 
   static final GlobalKey<NavigatorState> parentNavigatorKey =
       GlobalKey<NavigatorState>();
@@ -14,7 +19,7 @@ class AppRouter {
   static final GlobalKey<NavigatorState> tab2 = GlobalKey<NavigatorState>();
   static final GlobalKey<NavigatorState> tab3 = GlobalKey<NavigatorState>();
   static final GlobalKey<NavigatorState> tab4 = GlobalKey<NavigatorState>();
-  AppRouter() {
+  AppRouter(this._authCubit) {
     final routes = [
       StatefulShellRoute.indexedStack(
         branches: [
@@ -36,7 +41,7 @@ class AppRouter {
             navigatorKey: tab2,
             routes: [
               GoRoute(
-                path: Destination.homePath,
+                path: Destination.menu2Path,
                 pageBuilder: (context, GoRouterState state) {
                   return getPage(
                     child: const HomePage(),
@@ -50,7 +55,7 @@ class AppRouter {
             navigatorKey: tab3,
             routes: [
               GoRoute(
-                path: Destination.homePath,
+                path: Destination.menu3Path,
                 pageBuilder: (context, state) {
                   return getPage(
                     child: const HomePage(),
@@ -64,7 +69,7 @@ class AppRouter {
             navigatorKey: tab4,
             routes: [
               GoRoute(
-                path: Destination.homePath,
+                path: Destination.menu4Path,
                 pageBuilder: (context, state) {
                   return getPage(
                     child: const HomePage(),
@@ -88,14 +93,66 @@ class AppRouter {
           );
         },
       ),
+      GoRoute(
+        parentNavigatorKey: parentNavigatorKey,
+        path: Destination.signInPath,
+        pageBuilder: (context, state) {
+          return getPage(
+            child: const SignInPage(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: parentNavigatorKey,
+        path: Destination.signUpPath,
+        pageBuilder: (context, state) {
+          return getPage(
+            child: const SignUpPage(),
+            state: state,
+          );
+        },
+      ),
     ];
 
     _router = GoRouter(
       navigatorKey: parentNavigatorKey,
       initialLocation: Destination.homePath,
-      // refreshListenable: GoRouterRefreshStream(_authCubit.stream),
+      refreshListenable: GoRouterRefreshStream(_authCubit.stream),
       routes: routes,
-      // redirect: (context, state) {},
+      redirect: (context, state) {
+        final bool isAuthenticated =
+            _authCubit.state.status == AuthStatus.authenticated &&
+                _authCubit.state.data != null;
+
+        final bool isUnauthenticated =
+            _authCubit.state.status == AuthStatus.unauthenticated ||
+                _authCubit.state.data == null;
+
+        const nonAuthRoutes = [
+          Destination.signInPath,
+          Destination.signUpPath,
+          // '/forgot-password'
+        ];
+
+        // setelah main url, sub urlnya apa
+        String? subloc = state.fullPath;
+
+        // params from
+        String fromRoutes = state.pathParameters['from'] ?? '';
+
+        // jika akses /login tapi ternyata sudah authenticated
+        if (nonAuthRoutes.contains(subloc) && isAuthenticated) {
+          // ini ngembaliin ke halaman yang diinginkan setelah login
+          if (fromRoutes.isNotEmpty) {
+            return fromRoutes;
+          }
+          return Destination.homePath;
+        } else if (!nonAuthRoutes.contains(subloc) && isUnauthenticated) {
+          return Destination.signInPath;
+        }
+        return null;
+      },
     );
   }
 
@@ -114,6 +171,7 @@ class AppRouter {
 
 class Destination {
   static const String signInPath = '/signIn';
+  static const String signUpPath = '/signUp';
 
   static const String homePath = '/home';
   static const String menu2Path = '/menu2Path';

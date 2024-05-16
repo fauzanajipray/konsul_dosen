@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:konsul_dosen/features/auth/model/user_login.dart';
 import 'package:konsul_dosen/utils/load_status.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -14,10 +16,21 @@ class LoginCubit extends Cubit<LoginState> {
         email: email,
         password: password,
       );
+      // search from collection
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+
+      final userData = userDoc.data();
+      UserLogin userLogin = UserLogin.fromJson(userData ?? {});
+      print(
+          "userLogin: ${userLogin.email} ${userLogin.name} ${userLogin.nisn}");
+
       emit(state.copyWith(
-        status: LoadStatus.success,
-        user: userCredential.user,
-      ));
+          status: LoadStatus.success,
+          user: userCredential.user,
+          data: userLogin));
     } on FirebaseAuthException catch (e) {
       String? errorMsg = '';
       if (e.code == 'weak-password') {
@@ -38,25 +51,29 @@ class LoginState extends Equatable {
   const LoginState({
     this.status = LoadStatus.initial,
     this.user,
+    this.data,
     this.error,
   });
 
   final LoadStatus status;
   final User? user;
+  final UserLogin? data;
   final String? error;
 
   LoginState copyWith({
     LoadStatus? status,
     User? user,
+    UserLogin? data,
     String? error,
   }) {
     return LoginState(
       status: status ?? this.status,
       user: user ?? this.user,
+      data: data ?? this.data,
       error: error ?? this.error,
     );
   }
 
   @override
-  List<Object?> get props => [status, user, error];
+  List<Object?> get props => [status, user, data, error];
 }
