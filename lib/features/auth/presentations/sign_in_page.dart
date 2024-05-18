@@ -48,7 +48,7 @@ class _SignInPageState extends State<SignInPage> {
           context.read<AuthCubit>().setAuthenticated(state.data);
         } else if (state.status == LoadStatus.failure) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Registration Failed: ${state.error}')),
+            SnackBar(content: Text('Login Failed: ${state.error}')),
           );
         }
       }, builder: (context, state) {

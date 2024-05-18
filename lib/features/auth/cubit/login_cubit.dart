@@ -22,19 +22,18 @@ class LoginCubit extends Cubit<LoginState> {
           .doc(userCredential.user!.uid)
           .get();
 
-      final userData = userDoc.data();
-      UserLogin userLogin = UserLogin.fromJson(userData ?? {});
-      print(
-          "userLogin: ${userLogin.email} ${userLogin.name} ${userLogin.nisn}");
-
+      Map<String, dynamic> userData = userDoc.data() ?? {};
+      final userId = userDoc.id;
+      userData['userId'] = userId;
+      UserLogin userLogin = UserLogin.fromJson(userData);
       emit(state.copyWith(
           status: LoadStatus.success,
           user: userCredential.user,
           data: userLogin));
     } on FirebaseAuthException catch (e) {
       String? errorMsg = '';
-      if (e.code == 'weak-password') {
-        errorMsg = 'The password provided is too weak.';
+      if (e.code == 'invalid-credential') {
+        errorMsg = 'The email address is badly formatted.';
       } else if (e.code == 'email-already-in-use') {
         errorMsg = 'The account already exists for that email.';
       } else {

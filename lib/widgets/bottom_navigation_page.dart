@@ -27,20 +27,19 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             index,
             initialLocation: index == widget.child.currentIndex,
           );
-          setState(() {});
         },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'Beranda',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
-            label: 'Summary',
+            label: 'Artikel',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Partner',
+            icon: Icon(Icons.supervised_user_circle_sharp),
+            label: 'Mahasiswa',
           ),
         ],
       ),

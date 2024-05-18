@@ -22,7 +22,7 @@ class MyTextField extends StatefulWidget {
   final Color? textColor;
 
   const MyTextField({
-    Key? key,
+    super.key,
     required this.controller,
     this.initialValue,
     this.labelText,
@@ -40,7 +40,7 @@ class MyTextField extends StatefulWidget {
     this.validator,
     this.readOnly = false,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   MyTextFieldState createState() => MyTextFieldState();
@@ -141,11 +141,12 @@ class MyTextFieldState extends State<MyTextField> {
         //     color: Theme.of(context).colorScheme.onSurfaceVariant,
         //   ),
         // ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
+        enabledBorder: OutlineInputBorder(
+          borderSide:
+              BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade400),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
         ),
         filled: widget.filled,
         labelText: widget.labelText,

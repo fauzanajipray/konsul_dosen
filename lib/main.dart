@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_state.dart';
-import 'package:konsul_dosen/features/auth/presentations/sign_in_page.dart';
 import 'package:konsul_dosen/firebase_options.dart';
 import 'package:konsul_dosen/services/app_router.dart';
 import 'package:konsul_dosen/widgets/loading_progress.dart';
@@ -48,35 +47,6 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
   }
-
-  // void initAsyncData() {
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     _authCubit.checkToken();
-  //   });
-  //   if (mounted) {
-  //     setState(() {});
-  //   }
-  // }
-
-  // Future<void> initPlatformState() async {
-  //   if (!mounted) return;
-  //   OneSignal.Notifications.addClickListener((result) {
-  //     Map<String, dynamic>? additionalData = result.notification.additionalData;
-  //     logger.e(additionalData);
-  //     if (additionalData != null) {
-  //       String url = (additionalData['route'] as String?) ?? '';
-  //       logger.e(url);
-  //       if (url != '') {
-  //         _router.go(url);
-  //         return;
-  //       }
-  //     }
-  //     _router.go(Destination.home);
-  //   });
-  //   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-  //   OneSignal.initialize(AppConstant.oneSignalAppKey);
-  //   OneSignal.Notifications.requestPermission(true);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +109,8 @@ class _AppState extends State<App> {
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF0FAEAE),
           primary: const Color(0xFF0FAEAE),
-          secondary: const Color.fromARGB(255, 57, 81, 98),
+          secondary: const Color(0xFFF1BC19),
+          onSecondary: const Color.fromARGB(255, 33, 33, 33),
           onSurfaceVariant: Colors.grey,
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(

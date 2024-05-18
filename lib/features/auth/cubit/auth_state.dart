@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:konsul_dosen/features/auth/model/user_login.dart';
+import 'package:konsul_dosen/utils/enum_values.dart';
 
 enum AuthStatus {
   initial,
@@ -10,6 +11,11 @@ enum AuthStatus {
   unauthenticated,
   failure
 }
+
+final authStatusValues = EnumValues({
+  "authenticated": AuthStatus.authenticated,
+  "unauthenticated": AuthStatus.unauthenticated,
+});
 
 class AuthState extends Equatable {
   const AuthState({

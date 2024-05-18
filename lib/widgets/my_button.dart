@@ -5,6 +5,7 @@ enum TypeButton { outlined, filled, elevated }
 class MyButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final String text;
+  final double fontSize;
   final double verticalPadding;
   final double horizontalPadding;
   final bool disable;
@@ -15,9 +16,10 @@ class MyButton extends StatefulWidget {
   final FocusNode? focusNode;
 
   const MyButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.text,
+    this.fontSize = 16,
     this.horizontalPadding = 25,
     this.verticalPadding = 20,
     this.borderRadius = 5,
@@ -26,7 +28,7 @@ class MyButton extends StatefulWidget {
     this.color,
     this.textColor,
     this.focusNode,
-  }) : super(key: key);
+  });
 
   @override
   State<MyButton> createState() => _MyButtonState();
@@ -66,7 +68,7 @@ class _MyButtonState extends State<MyButton> {
       child: Text(
         widget.text,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: widget.fontSize,
           color: widget.textColor ?? Theme.of(context).colorScheme.onPrimary,
         ),
       ),
@@ -89,7 +91,7 @@ class _MyButtonState extends State<MyButton> {
       child: Text(
         widget.text,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: widget.fontSize,
           color: widget.textColor ?? Theme.of(context).colorScheme.onPrimary,
         ),
       ),
@@ -114,7 +116,7 @@ class _MyButtonState extends State<MyButton> {
       child: Text(
         widget.text,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: widget.fontSize,
           color: widget.textColor ??
               Theme.of(context).colorScheme.onPrimaryContainer,
         ),

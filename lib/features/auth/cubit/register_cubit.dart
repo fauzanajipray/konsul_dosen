@@ -17,25 +17,31 @@ class RegisterCubit extends Cubit<RegisterState> {
         email: email,
         password: password,
       );
+
       User? user = userCredential.user;
 
       if (user != null) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
+        // Obtain the user ID
+        String userId = user.uid;
+
+        // Add user information to the "users" collection
+        await FirebaseFirestore.instance.collection('users').doc(userId).set({
           'email': email,
           'name': nama,
           'nisn': nisn,
           'type': 'dosen',
         });
-      }
 
-      emit(state.copyWith(
-        status: LoadStatus.success,
-        user: UserLogin(email: email, name: nama, nisn: nisn),
-        error: null,
-      ));
+        // Update the state with the newly created user
+        emit(state.copyWith(
+          status: LoadStatus.success,
+          user: UserLogin(id: userId, email: email, name: nama, nisn: nisn),
+          error: null,
+        ));
+      }
+      // throw user null
+      throw FirebaseAuthException(
+          code: 'user-null', message: 'User Auth is null');
     } on FirebaseAuthException catch (e) {
       String? errorMsg = '';
       if (e.code == 'weak-password') {

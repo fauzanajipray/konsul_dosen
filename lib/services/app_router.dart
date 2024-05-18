@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konsul_dosen/features/article/presentations/add_articel_page.dart';
+import 'package:konsul_dosen/features/article/presentations/article_page.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_state.dart';
 import 'package:konsul_dosen/features/auth/presentations/sign_in_page.dart';
@@ -41,10 +43,10 @@ class AppRouter {
             navigatorKey: tab2,
             routes: [
               GoRoute(
-                path: Destination.menu2Path,
+                path: Destination.articlePath,
                 pageBuilder: (context, GoRouterState state) {
                   return getPage(
-                    child: const HomePage(),
+                    child: const ArticlePage(),
                     state: state,
                   );
                 },
@@ -113,6 +115,16 @@ class AppRouter {
           );
         },
       ),
+      GoRoute(
+        parentNavigatorKey: parentNavigatorKey,
+        path: Destination.addArticlePath,
+        pageBuilder: (context, state) {
+          return getPage(
+            child: const AddArticelPage(),
+            state: state,
+          );
+        },
+      ),
     ];
 
     _router = GoRouter(
@@ -140,6 +152,9 @@ class AppRouter {
 
         // params from
         String fromRoutes = state.pathParameters['from'] ?? '';
+
+        print(
+            "${_authCubit.state.status} - isAuthenticated : $isAuthenticated , isUnauthenticated : $isUnauthenticated ");
 
         // jika akses /login tapi ternyata sudah authenticated
         if (nonAuthRoutes.contains(subloc) && isAuthenticated) {
@@ -174,7 +189,8 @@ class Destination {
   static const String signUpPath = '/signUp';
 
   static const String homePath = '/home';
-  static const String menu2Path = '/menu2Path';
+  static const String articlePath = '/article';
+  static const String addArticlePath = '/add-article';
   static const String menu3Path = '/menu3Path';
   static const String menu4Path = '/menu4Path';
 }

@@ -14,12 +14,22 @@ class AuthCubit extends HydratedCubit<AuthState> {
   }
 
   @override
-  AuthState? fromJson(Map<String, dynamic> json) => AuthState(
-        data: UserLogin.fromJson(json),
-      );
+  AuthState? fromJson(Map<String, dynamic> json) {
+    // print("JSON => $json");
+    print("From JSON => ${UserLogin.fromJson(json['data']).toRawJson()}");
+    return AuthState(
+      data: UserLogin.fromJson(json['data']),
+      status:
+          authStatusValues.map[json["status"]] ?? AuthStatus.unauthenticated,
+    );
+  }
 
   @override
-  Map<String, dynamic>? toJson(AuthState state) => {
-        'data': state.data?.toRawJson(),
-      };
+  Map<String, dynamic>? toJson(AuthState state) {
+    print("To JSON => ${state.data?.toRawJson()}");
+    return {
+      'status': authStatusValues.reverse[state.status],
+      'data': state.data?.toRawJson(),
+    };
+  }
 }
