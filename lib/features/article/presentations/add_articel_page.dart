@@ -190,7 +190,7 @@ class _AddArticelPageState extends State<AddArticelPage> {
                     const SizedBox(width: 8),
                     Expanded(
                         child: MyButton(
-                            onPressed: () => _uploadArticle(state.data?.id),
+                            onPressed: () => _uploadArticle(state.userId),
                             text: 'Unggah')),
                   ],
                 );

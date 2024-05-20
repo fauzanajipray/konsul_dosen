@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
@@ -321,7 +320,7 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(fontWeight: FontWeight.normal),
                               ),
                               TextSpan(
-                                text: "${state.data?.name}",
+                                text: "${state.name}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w500),
                               ),

@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
 import 'package:konsul_dosen/features/auth/cubit/login_cubit.dart';
@@ -45,7 +44,9 @@ class _SignInPageState extends State<SignInPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Login Success')),
           );
-          context.read<AuthCubit>().setAuthenticated(state.data);
+          context
+              .read<AuthCubit>()
+              .setAuthenticated(state.userId, state.data?.name);
         } else if (state.status == LoadStatus.failure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Login Failed: ${state.error}')),

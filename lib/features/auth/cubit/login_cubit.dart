@@ -23,12 +23,13 @@ class LoginCubit extends Cubit<LoginState> {
           .get();
 
       Map<String, dynamic> userData = userDoc.data() ?? {};
-      final userId = userDoc.id;
-      userData['userId'] = userId;
+      print("==== > ${userCredential.user!.uid}");
       UserLogin userLogin = UserLogin.fromJson(userData);
+      print("----- > ${userLogin.toRawJson()}");
       emit(state.copyWith(
           status: LoadStatus.success,
           user: userCredential.user,
+          userId: userCredential.user!.uid,
           data: userLogin));
     } on FirebaseAuthException catch (e) {
       String? errorMsg = '';
@@ -50,23 +51,27 @@ class LoginState extends Equatable {
   const LoginState({
     this.status = LoadStatus.initial,
     this.user,
+    this.userId,
     this.data,
     this.error,
   });
 
   final LoadStatus status;
   final User? user;
+  final String? userId;
   final UserLogin? data;
   final String? error;
 
   LoginState copyWith({
     LoadStatus? status,
     User? user,
+    String? userId,
     UserLogin? data,
     String? error,
   }) {
     return LoginState(
       status: status ?? this.status,
+      userId: userId ?? this.userId,
       user: user ?? this.user,
       data: data ?? this.data,
       error: error ?? this.error,
@@ -74,5 +79,5 @@ class LoginState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [status, user, data, error];
+  List<Object?> get props => [status, userId, user, data, error];
 }

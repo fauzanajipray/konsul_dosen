@@ -16,20 +16,26 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // Inisialisasi HydratedStorage
   final storage = await HydratedStorage.build(
-      storageDirectory: kIsWeb
-          ? HydratedStorage.webStorageDirectory
-          : await getApplicationDocumentsDirectory());
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getApplicationDocumentsDirectory(),
+  );
   HydratedBloc.storage = storage;
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // Inisialisasi Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  SystemChrome.setPreferredOrientations([
+
+  // Mengatur preferensi orientasi layar
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-  ]).then((_) {
-    runApp(const App());
-  });
+  ]);
+
+  // Menjalankan aplikasi
+  runApp(const App());
 }
 
 class App extends StatefulWidget {

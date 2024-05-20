@@ -20,42 +20,30 @@ final authStatusValues = EnumValues({
 class AuthState extends Equatable {
   const AuthState({
     this.status = AuthStatus.unauthenticated,
-    this.data,
+    this.userId = '',
+    this.name = '',
     this.error,
   });
 
   final AuthStatus status;
-  final UserLogin? data;
+  final String? userId;
+  final String? name;
   final DioException? error;
 
   AuthState copyWith({
     AuthStatus? status,
-    dynamic? data,
+    String? userId,
+    String? name,
     DioException? error,
   }) {
     return AuthState(
       status: status ?? this.status,
-      data: _setData(data),
+      userId: userId ?? this.userId,
+      name: name ?? this.name,
       error: error ?? this.error,
     );
   }
 
-  UserLogin? _setData(dynamic selectedData) {
-    if (selectedData is bool) {
-      return null;
-    } else {
-      if (selectedData is UserLogin) {
-        return selectedData;
-      } else {
-        return data;
-      }
-    }
-  }
-
   @override
-  List<Object?> get props => [
-        status,
-        data,
-        error,
-      ];
+  List<Object?> get props => [status, name, userId, error];
 }
