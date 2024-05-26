@@ -9,7 +9,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit() : super(const RegisterState());
 
   Future<void> register(
-      String email, String password, String nama, String nisn) async {
+      String email, String password, String nama, String nip) async {
     emit(state.copyWith(status: LoadStatus.loading));
     try {
       UserCredential userCredential =
@@ -28,14 +28,14 @@ class RegisterCubit extends Cubit<RegisterState> {
         await FirebaseFirestore.instance.collection('users').doc(userId).set({
           'email': email,
           'name': nama,
-          'nisn': nisn,
+          'nip': nip,
           'type': 'dosen',
         });
 
         // Update the state with the newly created user
         emit(state.copyWith(
           status: LoadStatus.success,
-          user: UserLogin(id: userId, email: email, name: nama, nisn: nisn),
+          user: UserLogin(id: userId, email: email, name: nama, nip: nip),
           error: null,
         ));
       }

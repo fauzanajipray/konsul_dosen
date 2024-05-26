@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:konsul_dosen/features/auth/model/user_login.dart';
 import 'package:konsul_dosen/utils/enum_values.dart';
 
 enum AuthStatus {

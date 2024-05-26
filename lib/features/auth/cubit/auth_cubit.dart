@@ -10,15 +10,12 @@ class AuthCubit extends HydratedCubit<AuthState> {
   }
 
   void setAuthenticated(String? userId, String? name) {
-    print("Set Authenticated : $userId, $name");
     emit(state.copyWith(
         status: AuthStatus.authenticated, userId: userId, name: name));
   }
 
   @override
   AuthState? fromJson(Map<String, dynamic> json) {
-    // print("JSON => $json");
-    print("From JSON => $json");
     return AuthState(
       status:
           authStatusValues.map[json["status"]] ?? AuthStatus.unauthenticated,
@@ -29,7 +26,6 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   @override
   Map<String, dynamic>? toJson(AuthState state) {
-    print("To JSON => ${state.name} - ${state.userId}");
     return {
       'status': authStatusValues.reverse[state.status],
       'userId': state.userId,

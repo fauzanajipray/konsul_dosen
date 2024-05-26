@@ -1,16 +1,19 @@
 import 'dart:convert';
 
 class UserLogin {
-  final String id;
-  final String email;
-  final String name;
-  final String nisn;
+  final String? id;
+  final String? email;
+  final String? name;
+  final String? nip;
+  final String? type;
 
-  UserLogin(
-      {required this.id,
-      required this.email,
-      required this.name,
-      required this.nisn});
+  UserLogin({
+    this.id,
+    this.email,
+    this.name,
+    this.nip,
+    this.type,
+  });
 
   factory UserLogin.fromRawJson(String id, String str) =>
       UserLogin.fromJson(json.decode(str));
@@ -21,13 +24,15 @@ class UserLogin {
         id: json["id"] ?? '',
         email: json["email"] ?? '',
         name: json["name"] ?? '',
-        nisn: json["nisn"] ?? '',
+        nip: json["nip"] ?? '',
+        type: json["type"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "email": email,
         "name": name,
-        "nisn": nisn,
+        "nip": nip,
+        "type": type,
       };
 }

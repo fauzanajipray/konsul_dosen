@@ -76,7 +76,7 @@ class _AppState extends State<App> {
 
   Widget buildMaterialApp(GoRouter router) {
     return MaterialApp.router(
-      title: 'Pumo Partner',
+      title: 'Konsul Dosen',
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
         return BlocBuilder<AuthCubit, AuthState>(

@@ -23,18 +23,21 @@ class LoginCubit extends Cubit<LoginState> {
           .get();
 
       Map<String, dynamic> userData = userDoc.data() ?? {};
-      print("==== > ${userCredential.user!.uid}");
       UserLogin userLogin = UserLogin.fromJson(userData);
-      print("----- > ${userLogin.toRawJson()}");
-      emit(state.copyWith(
-          status: LoadStatus.success,
-          user: userCredential.user,
-          userId: userCredential.user!.uid,
-          data: userLogin));
+      if (userLogin.type == "dosen") {
+        emit(state.copyWith(
+            status: LoadStatus.success,
+            user: userCredential.user,
+            userId: userCredential.user!.uid,
+            data: userLogin));
+      } else {
+        throw FirebaseAuthException(
+            code: 'invalid-credential', message: 'Invalid Credential');
+      }
     } on FirebaseAuthException catch (e) {
       String? errorMsg = '';
       if (e.code == 'invalid-credential') {
-        errorMsg = 'The email address is badly formatted.';
+        errorMsg = 'Invalid Credential';
       } else if (e.code == 'email-already-in-use') {
         errorMsg = 'The account already exists for that email.';
       } else {

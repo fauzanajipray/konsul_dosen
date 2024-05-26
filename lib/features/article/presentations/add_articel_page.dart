@@ -31,9 +31,6 @@ class _AddArticelPageState extends State<AddArticelPage> {
     setState(() {
       _image = pickedImage;
     });
-
-    String fileName = path.basename(_image!.path);
-    print('Image picked: $fileName');
   }
 
   Future<void> _uploadArticle(String? id) async {

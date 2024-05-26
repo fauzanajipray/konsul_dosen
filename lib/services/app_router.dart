@@ -155,24 +155,18 @@ class AppRouter {
         // params from
         String fromRoutes = state.pathParameters['from'] ?? '';
 
-        print(
-            "${_authCubit.state.status} - isAuthenticated : $isAuthenticated , isUnauthenticated : $isUnauthenticated ");
+        // print("${_authCubit.state.status} - isAuthenticated : $isAuthenticated , isUnauthenticated : $isUnauthenticated ");
 
         // jika akses /login tapi ternyata sudah authenticated
-        print('--- Here ---');
         if (nonAuthRoutes.contains(subloc) && isAuthenticated) {
           // ini ngembaliin ke halaman yang diinginkan setelah login
           if (fromRoutes.isNotEmpty) {
-            print('Here 2');
             return fromRoutes;
           }
-          print('Here 1');
           return Destination.homePath;
         } else if (!nonAuthRoutes.contains(subloc) && isUnauthenticated) {
-          print('Here 3');
           return Destination.signInPath;
         }
-        print('Here4 ');
         return null;
       },
     );

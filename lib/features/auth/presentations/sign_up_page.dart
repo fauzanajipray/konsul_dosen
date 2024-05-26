@@ -17,11 +17,11 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController nisnController = TextEditingController();
+  final TextEditingController nipController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FocusNode _focusNodeName = FocusNode();
-  final FocusNode _focusNodeNisn = FocusNode();
+  final FocusNode _focusNodeNip = FocusNode();
   final FocusNode _focusNodeEmail = FocusNode();
   final FocusNode _focusNodePassword = FocusNode();
   final FocusNode _focusNodeButton = FocusNode();
@@ -43,7 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
           if (state.status == LoadStatus.success) {
             setState(() {
               nameController.text = '';
-              nisnController.text = '';
+              nipController.text = '';
               emailController.text = '';
               passwordController.text = '';
             });
@@ -102,27 +102,27 @@ class _SignUpPageState extends State<SignUpPage> {
                             onEditingComplete: () {
                               _focusNodeName.unfocus();
                               FocusScope.of(context)
-                                  .requestFocus(_focusNodeNisn);
+                                  .requestFocus(_focusNodeNip);
                             },
                             textColor: Theme.of(context).colorScheme.onSurface,
                           ),
                           const SizedBox(height: 24),
                           MyTextField(
-                            controller: nisnController,
-                            labelText: 'NISN',
+                            controller: nipController,
+                            labelText: 'NIP',
                             // errorText: extractErrorMessageFromError(emailError),
                             type: TextFieldType.normal,
-                            focusNode: _focusNodeNisn,
+                            focusNode: _focusNodeNip,
                             // prefixIcon: const Icon(Icons.person_outline),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'NISN tidak boleh kosong';
+                                return 'NIP tidak boleh kosong';
                               }
                               return null;
                             },
                             filled: false,
                             onEditingComplete: () {
-                              _focusNodeNisn.unfocus();
+                              _focusNodeNip.unfocus();
                               FocusScope.of(context)
                                   .requestFocus(_focusNodeEmail);
                             },
@@ -192,7 +192,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         emailController.text,
                                         passwordController.text,
                                         nameController.text,
-                                        nisnController.text,
+                                        nipController.text,
                                       );
                                 }
                               },
