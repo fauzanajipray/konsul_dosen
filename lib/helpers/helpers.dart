@@ -1,11 +1,18 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+String formatTimestampToTime(Timestamp timestamp) {
+  DateTime dateTime = timestamp.toDate();
+  return DateFormat('HH:mm').format(dateTime);
+}
 
 Future<File?> getImage(
     BuildContext context, ImageSource imageSource, ImagePicker picker) async {

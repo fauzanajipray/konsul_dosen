@@ -161,7 +161,7 @@ class _AddArticelPageState extends State<AddArticelPage> {
                   controller: _tempController,
                   prefixIcon: Icon(
                     Icons.image,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.outline,
                   ),
                   labelText: 'Pilih gambar',
                   type: TextFieldType.none,

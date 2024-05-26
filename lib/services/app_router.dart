@@ -9,6 +9,8 @@ import 'package:konsul_dosen/features/auth/cubit/auth_state.dart';
 import 'package:konsul_dosen/features/auth/presentations/sign_in_page.dart';
 import 'package:konsul_dosen/features/auth/presentations/sign_up_page.dart';
 import 'package:konsul_dosen/features/home/presentations/home_page.dart';
+import 'package:konsul_dosen/features/student/presentation/add_schedule_page.dart';
+import 'package:konsul_dosen/features/student/presentation/counseling_page.dart';
 import 'package:konsul_dosen/widgets/bottom_navigation_page.dart';
 
 class AppRouter {
@@ -57,10 +59,10 @@ class AppRouter {
             navigatorKey: tab3,
             routes: [
               GoRoute(
-                path: Destination.menu3Path,
+                path: Destination.counselingPath,
                 pageBuilder: (context, state) {
                   return getPage(
-                    child: const HomePage(),
+                    child: const CounselingPage(),
                     state: state,
                   );
                 },
@@ -121,6 +123,16 @@ class AppRouter {
         pageBuilder: (context, state) {
           return getPage(
             child: const AddArticelPage(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: parentNavigatorKey,
+        path: Destination.addSchedulePath,
+        pageBuilder: (context, state) {
+          return getPage(
+            child: const AddSchedulePage(),
             state: state,
           );
         },
@@ -192,8 +204,10 @@ class Destination {
   static const String homePath = '/home';
   static const String articlePath = '/article';
   static const String addArticlePath = '/add-article';
-  static const String menu3Path = '/menu3Path';
+  static const String counselingPath = '/counseling';
   static const String menu4Path = '/menu4Path';
+
+  static const String addSchedulePath = '/add-schedule';
 }
 
 class GoRouterRefreshStream extends ChangeNotifier {
