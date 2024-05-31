@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konsul_dosen/features/article/presentations/add_articel_page.dart';
 import 'package:konsul_dosen/features/article/presentations/article_page.dart';
@@ -9,8 +10,11 @@ import 'package:konsul_dosen/features/auth/cubit/auth_state.dart';
 import 'package:konsul_dosen/features/auth/presentations/sign_in_page.dart';
 import 'package:konsul_dosen/features/auth/presentations/sign_up_page.dart';
 import 'package:konsul_dosen/features/home/presentations/home_page.dart';
+import 'package:konsul_dosen/features/student/bloc/student_cubit.dart';
 import 'package:konsul_dosen/features/student/presentation/add_schedule_page.dart';
 import 'package:konsul_dosen/features/student/presentation/counseling_page.dart';
+import 'package:konsul_dosen/features/student/presentation/error_data_not_found_page.dart';
+import 'package:konsul_dosen/features/student/presentation/student_detail_page.dart';
 import 'package:konsul_dosen/widgets/bottom_navigation_page.dart';
 
 class AppRouter {
@@ -137,6 +141,19 @@ class AppRouter {
           );
         },
       ),
+      GoRoute(
+        name: 'Detail Mahasiswa',
+        path: Destination.userPath,
+        builder: (context, state) {
+          String? uid = state.pathParameters['id'];
+          if (uid != null) {
+            return BlocProvider(
+                create: (context) => StudentCubit(),
+                child: StudentDetailPage(uid));
+          }
+          return const ErrorDataNotFoundPage('ID User is NULL');
+        },
+      ),
     ];
 
     _router = GoRouter(
@@ -205,6 +222,8 @@ class Destination {
   static const String articlePath = '/article';
   static const String addArticlePath = '/add-article';
   static const String counselingPath = '/counseling';
+  static const String userPath = '/user/:id';
+
   static const String menu4Path = '/menu4Path';
 
   static const String addSchedulePath = '/add-schedule';

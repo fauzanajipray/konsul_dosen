@@ -96,7 +96,7 @@ class _CounselingPageState extends State<CounselingPage> {
               child: MyButton(
                 text: '+ Tambahkan Jadwal',
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: 20,
+                fontSize: 16,
                 onPressed: () => context.push(Destination.addSchedulePath),
               ),
             ),
@@ -155,6 +155,7 @@ class _CounselingPageState extends State<CounselingPage> {
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot? doc = snapshot.data?.docs[index];
+                      String? uid = doc?.id;
 
                       String? imageUrl = (doc?.data() as Map<String, dynamic>)
                               .containsKey('image')
@@ -188,7 +189,8 @@ class _CounselingPageState extends State<CounselingPage> {
                           ),
                           trailing: const Icon(Icons.keyboard_arrow_right),
                           onTap: () {
-                            print('check');
+                            context.push(Destination.userPath
+                                .replaceAll(':id', uid ?? ''));
                           },
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),

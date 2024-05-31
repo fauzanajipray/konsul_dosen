@@ -62,25 +62,21 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                     children: [
                       const Center(
                         child: Text(
-                          'Di sini anda dapat menambahkan jadwal anda',
-                          style: TextStyle(fontSize: 16),
-                        ),
+                            'Di sini anda dapat menambahkan jadwal anda',
+                            style: TextStyle(fontSize: 16)),
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 16, bottom: 8),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Theme.of(context)
-                              .colorScheme
-                              .outline
-                              .withOpacity(0.1),
-                        ),
+                            borderRadius: BorderRadius.circular(5),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .outline
+                                .withOpacity(0.1)),
                         child: MyTextField(
                           controller: _timeController,
-                          prefixIcon: Icon(
-                            Icons.access_time,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
+                          prefixIcon: Icon(Icons.access_time,
+                              color: Theme.of(context).colorScheme.outline),
                           type: TextFieldType.none,
                           textColor: Theme.of(context).colorScheme.onSurface,
                           onTap: () {

@@ -38,8 +38,8 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             label: 'Artikel',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.supervised_user_circle_sharp),
-            label: 'Mahasiswa',
+            label: 'Konseling',
+            icon: Icon(Icons.document_scanner),
           ),
         ],
       ),

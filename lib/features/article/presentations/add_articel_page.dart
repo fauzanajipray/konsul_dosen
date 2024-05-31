@@ -34,12 +34,11 @@ class _AddArticelPageState extends State<AddArticelPage> {
   }
 
   Future<void> _uploadArticle(String? id) async {
-    if (_image == null ||
-        _titleController.text.isEmpty ||
+    if (_titleController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
         _shortUrlController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Please fill all fields and select an image.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill all fields')));
       return;
     }
 
@@ -55,20 +54,23 @@ class _AddArticelPageState extends State<AddArticelPage> {
       String formattedDate =
           '${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}';
       String fileName = 'article_$formattedDate.jpg';
+      String? imageUrl;
 
       // Upload image to Firebase Storage with the new filename
-      Reference storageRef =
-          FirebaseStorage.instance.ref().child('articles/$fileName');
-      UploadTask uploadTask = storageRef.putFile(File(_image!.path));
-      TaskSnapshot snapshot = await uploadTask;
-      String imageUrl = await snapshot.ref.getDownloadURL();
+      if (_image != null) {
+        Reference storageRef =
+            FirebaseStorage.instance.ref().child('articles/$fileName');
+        UploadTask uploadTask = storageRef.putFile(File(_image!.path));
+        TaskSnapshot snapshot = await uploadTask;
+        imageUrl = await snapshot.ref.getDownloadURL();
+      }
 
       // Save article data to Firestore
       await FirebaseFirestore.instance.collection('articles').add({
         'title': _titleController.text,
         'description': _descriptionController.text,
         'shortUrl': _shortUrlController.text,
-        'imageUrl': imageUrl,
+        'imageUrl': imageUrl ?? '',
         'userId': id,
         'createdAt': Timestamp.now(),
       });
@@ -166,7 +168,27 @@ class _AddArticelPageState extends State<AddArticelPage> {
                   labelText: 'Pilih gambar',
                   type: TextFieldType.none,
                   textColor: Theme.of(context).colorScheme.onSurface,
-                  onTap: () => _pickImage(),
+                  onTap: () {
+                    // check is Android
+                    if (Platform.isAndroid) {
+                      _pickImage();
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                                title: const Text('Peringatan'),
+                                content: const Text(
+                                    'Untuk memilih gambar, harap menggunakan perangkat Android.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ]);
+                          });
+                    }
+                  },
                 ),
               ),
               const SizedBox(height: 20),

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:konsul_dosen/utils/enum_values.dart';
 
@@ -21,28 +20,24 @@ class AuthState extends Equatable {
     this.status = AuthStatus.unauthenticated,
     this.userId = '',
     this.name = '',
-    this.error,
   });
 
   final AuthStatus status;
   final String? userId;
   final String? name;
-  final DioException? error;
 
   AuthState copyWith({
     AuthStatus? status,
     String? userId,
     String? name,
-    DioException? error,
   }) {
     return AuthState(
       status: status ?? this.status,
       userId: userId ?? this.userId,
       name: name ?? this.name,
-      error: error ?? this.error,
     );
   }
 
   @override
-  List<Object?> get props => [status, name, userId, error];
+  List<Object?> get props => [status, name, userId];
 }
