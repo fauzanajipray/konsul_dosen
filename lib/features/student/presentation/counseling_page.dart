@@ -124,7 +124,7 @@ class _CounselingPageState extends State<CounselingPage> {
                               '')
                   .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.hasError || snapshot.data == null) {
+                if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
 
@@ -189,7 +189,7 @@ class _CounselingPageState extends State<CounselingPage> {
                           ),
                           trailing: const Icon(Icons.keyboard_arrow_right),
                           onTap: () {
-                            context.push(Destination.userPath
+                            context.push(Destination.studentDetailPath
                                 .replaceAll(':id', uid ?? ''));
                           },
                           leading: ClipRRect(

@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
 import 'package:konsul_dosen/features/auth/model/all_user.dart';
 import 'package:konsul_dosen/features/student/bloc/appointment_cubit.dart';
 import 'package:konsul_dosen/features/student/bloc/student_cubit.dart';
+import 'package:konsul_dosen/features/student/model/promise.dart';
 import 'package:konsul_dosen/helpers/dialog.dart';
 import 'package:konsul_dosen/helpers/helpers.dart';
+import 'package:konsul_dosen/services/app_router.dart';
 import 'package:konsul_dosen/utils/data_state.dart';
 import 'package:konsul_dosen/utils/load_status.dart';
 import 'package:konsul_dosen/widgets/loading_progress.dart';
@@ -149,148 +152,6 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                             ),
                           ),
                         ),
-                        /*
-                        StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('promises')
-                              .where('dosenId',
-                                  isEqualTo: BlocProvider.of<AuthCubit>(context)
-                                      .state
-                                      .userId)
-                              .where('siswaId', isEqualTo: state.item?.id)
-                              .orderBy('updatedAt', descending: true)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return Center(child: Text('Error: ${snapshot.error}'));
-                            }
-                  
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const Center(child: CircularProgressIndicator());
-                            }
-                  
-                            if (snapshot.data!.docs.isEmpty) {
-                              return Container(
-                                padding: const EdgeInsets.all(16),
-                                color: Theme.of(context).colorScheme.primary,
-                                child: Center(
-                                  child: Text(
-                                    'Tidak ada siswa bimbingan',
-                                    style: TextStyle(
-                                        color:
-                                            Theme.of(context).colorScheme.onPrimary),
-                                  ),
-                                ),
-                              );
-                            }
-                  
-                            List<DocumentSnapshot> promisesDocs = snapshot.data!.docs;
-                  
-                            return FutureBuilder<List<DocumentSnapshot>>(
-                              future:
-                                  Future.wait(promisesDocs.map((promiseDoc) async {
-                                String siswaId = promiseDoc['siswaId'];
-                                DocumentSnapshot userDoc = await FirebaseFirestore
-                                    .instance
-                                    .collection('users')
-                                    .doc(siswaId)
-                                    .get();
-                                return userDoc;
-                              })),
-                              builder: (context, usersSnapshot) {
-                                if (usersSnapshot.hasError) {
-                                  return Center(
-                                      child: Text('Error: ${usersSnapshot.error}'));
-                                }
-                  
-                                if (usersSnapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                }
-                  
-                                if (!usersSnapshot.hasData ||
-                                    usersSnapshot.data!.isEmpty) {
-                                  return Container(
-                                    padding: const EdgeInsets.all(16),
-                                    color: Theme.of(context).colorScheme.primary,
-                                    child: Center(
-                                      child: Text(
-                                        'Tidak ada siswa bimbingan',
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary),
-                                      ),
-                                    ),
-                                  );
-                                }
-                  
-                                List<DocumentSnapshot> usersDocs =
-                                    usersSnapshot.data!;
-                  
-                                return Container(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  width: double.infinity,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: promisesDocs.length,
-                                    itemBuilder: (context, index) {
-                                      DocumentSnapshot promiseDoc =
-                                          promisesDocs[index];
-                                      DocumentSnapshot userDoc = usersDocs.firstWhere(
-                                          (doc) => doc.id == promiseDoc['siswaId']);
-                  
-                                      String? uid = promiseDoc.id;
-                                      Timestamp? updateAt = promiseDoc['updatedAt'];
-                                      String? status = promiseDoc['status'];
-                                      String? userName = userDoc['name'];
-                  
-                                      return Container(
-                                        margin:
-                                            const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                                        padding:
-                                            const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Theme.of(context).colorScheme.surface,
-                                          borderRadius: BorderRadius.circular(8.0),
-                                          boxShadow: const [
-                                            BoxShadow(
-                                              color: Colors.black12,
-                                              blurRadius: 4.0,
-                                              spreadRadius: 2.0,
-                                            ),
-                                          ],
-                                        ),
-                                        child: ListTile(
-                                          minVerticalPadding: 5,
-                                          title: Text(
-                                            capitalize(status ?? '-'),
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface),
-                                          ),
-                                          subtitle: Text(formatDateTimeCustom(
-                                              updateAt?.toDate())),
-                                          trailing:
-                                              const Icon(Icons.keyboard_arrow_right),
-                                          onTap: () {
-                                            // context.push(Destination.userPath.replaceAll(':id', uid ?? ''));
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        )
-                        */
-
                         StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('promises')
@@ -342,14 +203,9 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                                   DocumentSnapshot promiseDoc =
                                       usersDocs[index];
                                   String uid = promiseDoc.id;
-                                  Timestamp? date = promiseDoc['date'];
-                                  String? reason = (promiseDoc.data()
-                                              as Map<String, dynamic>)
-                                          .containsKey('reason')
-                                      ? promiseDoc['reason']
-                                      : null;
-                                  String? status = promiseDoc['status'];
-
+                                  Promise promise = Promise.fromJson(promiseDoc
+                                          .data() as Map<String, dynamic>)
+                                      .copyWith(id: uid);
                                   return Container(
                                     margin:
                                         const EdgeInsets.fromLTRB(16, 8, 16, 4),
@@ -370,18 +226,17 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                                     child: ListTile(
                                       minVerticalPadding: 6,
                                       title: Text(
-                                        capitalize(status ?? '-'),
+                                        capitalize(promise.status ?? '-'),
                                         style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface),
+                                            color:
+                                                getColorStatus(promise.status)),
                                       ),
                                       subtitle: Text(
-                                          "${formatDateTimeCustom(date?.toDate(), format: 'EEEE, d MMM yyyy HH:mm')}${reason != null ? '\n$reason' : ''}"),
+                                          "${formatDateTimeCustom(promise.date, format: 'EEEE, d MMM yyyy HH:mm')}${promise.reason != null ? '\n${promise.reason}' : ''}"),
                                       trailing: const Icon(
                                           Icons.keyboard_arrow_right),
                                       onTap: () {
-                                        if (status == 'pending') {
+                                        if (promise.status == 'pending') {
                                           showDialogConfirmation(
                                             context,
                                             () {
@@ -488,6 +343,14 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                                               );
                                             },
                                           );
+                                        } else if (promise.status ==
+                                            'accepted') {
+                                          print("Room Id : ${promise.roomId}");
+                                          context.push(
+                                              Destination.chatPath.replaceAll(
+                                                  ':id',
+                                                  promise.roomId ?? ':id'),
+                                              extra: promise.roomId);
                                         }
                                       },
                                     ),

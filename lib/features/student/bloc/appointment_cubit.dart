@@ -20,19 +20,20 @@ class AppointmentCubit extends Cubit<DataState> {
       if (docSnapshot.exists) {
         final data = docSnapshot.data();
         // Create new data on collection rooms, rooms mena room for chat
-        await FirebaseFirestore.instance.collection('rooms').add({
-          'promisesId': uid,
-          'studentId': data?['studentId'] ?? '',
+        final roomsData =
+            await FirebaseFirestore.instance.collection('rooms').add({
+          'promiseId': uid,
+          'siswaId': data?['siswaId'] ?? '',
           'dosenId': data?['dosenId'] ?? '',
           'status': 'open',
         });
         // Update promises to accepted
-        await FirebaseFirestore.instance
-            .collection('promises')
-            .doc(uid)
-            .update({
-          'status': 'accepted',
-        });
+        await FirebaseFirestore.instance.collection('promises').doc(uid).update(
+          {
+            'status': 'accepted',
+            'roomId': roomsData.id,
+          },
+        );
       } else {
         await FirebaseFirestore.instance
             .collection('promises')

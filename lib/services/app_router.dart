@@ -9,6 +9,8 @@ import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_state.dart';
 import 'package:konsul_dosen/features/auth/presentations/sign_in_page.dart';
 import 'package:konsul_dosen/features/auth/presentations/sign_up_page.dart';
+import 'package:konsul_dosen/features/chat/bloc/chat_cubit.dart';
+import 'package:konsul_dosen/features/chat/presentations/chat_page.dart';
 import 'package:konsul_dosen/features/home/presentations/home_page.dart';
 import 'package:konsul_dosen/features/student/bloc/student_cubit.dart';
 import 'package:konsul_dosen/features/student/presentation/add_schedule_page.dart';
@@ -142,8 +144,9 @@ class AppRouter {
         },
       ),
       GoRoute(
+        parentNavigatorKey: parentNavigatorKey,
         name: 'Detail Mahasiswa',
-        path: Destination.userPath,
+        path: Destination.studentDetailPath,
         builder: (context, state) {
           String? uid = state.pathParameters['id'];
           if (uid != null) {
@@ -152,6 +155,21 @@ class AppRouter {
                 child: StudentDetailPage(uid));
           }
           return const ErrorDataNotFoundPage('ID User is NULL');
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: parentNavigatorKey,
+        name: 'Chat Mahasiswa',
+        path: Destination.chatPath,
+        builder: (context, state) {
+          String? uid = state.pathParameters['id'];
+          if (uid != null) {
+            return BlocProvider<RoomCubit>(
+              create: (context) => RoomCubit(),
+              child: ChatPage(uid),
+            );
+          }
+          return const ErrorDataNotFoundPage('ID Room is NULL');
         },
       ),
     ];
@@ -222,7 +240,8 @@ class Destination {
   static const String articlePath = '/article';
   static const String addArticlePath = '/add-article';
   static const String counselingPath = '/counseling';
-  static const String userPath = '/user/:id';
+  static const String studentDetailPath = '/user/:id';
+  static const String chatPath = '/chat/:id';
 
   static const String menu4Path = '/menu4Path';
 

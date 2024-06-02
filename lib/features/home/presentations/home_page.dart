@@ -32,144 +32,75 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: LayoutBuilder(builder: (context, constraint) {
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-                return Container(
-                  margin: const EdgeInsets.all(16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 60.0,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2.0),
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                        child: ClipOval(
-                          child: Image.asset(
-                            'assets/images/user.png',
-                            fit: BoxFit.cover,
-                          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+              return Container(
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 60.0,
+                      height: 60.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2.0),
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/images/user.png',
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: TextSpan(children: [
-                              const TextSpan(
-                                text: "Hai, ",
-                                style: TextStyle(fontWeight: FontWeight.normal),
-                              ),
-                              TextSpan(
-                                text: "${state.name}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ]),
-                          ),
-                          Text(
-                            "Bagaimana perasaan mu hari ini? ",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontWeight: FontWeight.normal,
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(children: [
+                            const TextSpan(
+                              text: "Hai, ",
+                              style: TextStyle(fontWeight: FontWeight.normal),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              }),
-              StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('articles')
-                      .limit(3)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Container(
-                          padding: const EdgeInsets.all(16),
-                          child:
-                              Center(child: Text('Error: ${snapshot.error}')));
-                    }
-
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (snapshot.data!.docs.isEmpty) {
-                      return Container(
-                        height: 80,
-                        color: Theme.of(context).colorScheme.primary,
-                        child: const Center(
-                          child: Text(
-                            'No articles found',
-                            style: TextStyle(color: Colors.white),
+                            TextSpan(
+                              text: "${state.name}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                          ]),
+                        ),
+                        Text(
+                          "Bagaimana perasaan mu hari ini? ",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
-                      );
-                    }
-
-                    return Container(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 8),
-                          ...snapshot.data!.docs
-                              .map((DocumentSnapshot document) {
-                            return ArticleItem(article: document, index: 0);
-                          }),
-                          Container(
-                            color: Theme.of(context).colorScheme.primary,
-                            padding: const EdgeInsets.only(bottom: 16, top: 8),
-                            child: Center(
-                              child: SizedBox(
-                                width: 180,
-                                height: 40,
-                                child: MyButton(
-                                  onPressed: () =>
-                                      context.go(Destination.articlePath),
-                                  text: 'Lihat lebih banyak',
-                                  verticalPadding: 0,
-                                  horizontalPadding: 4,
-                                  fontSize: 14,
-                                  color: Theme.of(context).colorScheme.surface,
-                                  textColor:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-              StreamBuilder<QuerySnapshot>(
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }),
+            StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('users')
-                    .where('type', isEqualTo: 'siswa')
-                    .where('pembimbing',
-                        isEqualTo:
-                            BlocProvider.of<AuthCubit>(context).state.userId ??
-                                '')
-                    .limit(4)
+                    .collection('articles')
+                    .limit(3)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasError || snapshot.data == null) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
+                  if (snapshot.hasError) {
+                    return Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Center(child: Text('Error: ${snapshot.error}')));
                   }
 
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -179,50 +110,42 @@ class _HomePageState extends State<HomePage> {
                   if (snapshot.data!.docs.isEmpty) {
                     return Container(
                       height: 80,
-                      color: Theme.of(context).colorScheme.surface,
-                      child: Center(
+                      color: Theme.of(context).colorScheme.primary,
+                      child: const Center(
                         child: Text(
-                          'Tidak ada siswa bimbingan',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface),
+                          'No articles found',
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     );
                   }
 
                   return Container(
-                    color: Theme.of(context).colorScheme.surface,
+                    color: Theme.of(context).colorScheme.primary,
                     width: double.infinity,
                     child: Column(
                       children: [
+                        const SizedBox(height: 8),
                         ...snapshot.data!.docs.map((DocumentSnapshot document) {
-                          String? imageUrl =
-                              (document.data() as Map<String, dynamic>)
-                                      .containsKey('image')
-                                  ? document['image']
-                                  : null;
-                          String? name =
-                              (document.data() as Map<String, dynamic>)
-                                      .containsKey('name')
-                                  ? document['name']
-                                  : null;
-                          return SiswaItem(name: name, imageUrl: imageUrl);
+                          return ArticleItem(article: document, index: 0);
                         }),
                         Container(
-                          padding: const EdgeInsets.only(bottom: 16, top: 16),
+                          color: Theme.of(context).colorScheme.primary,
+                          padding: const EdgeInsets.only(bottom: 16, top: 8),
                           child: Center(
                             child: SizedBox(
-                              width: 280,
+                              width: 180,
                               height: 40,
                               child: MyButton(
-                                onPressed: () => {},
-                                text: 'Lihat Seluruh Mahasiswa Bimbingan',
+                                onPressed: () =>
+                                    context.go(Destination.articlePath),
+                                text: 'Lihat lebih banyak',
                                 verticalPadding: 0,
                                 horizontalPadding: 4,
                                 fontSize: 14,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).colorScheme.surface,
                                 textColor:
-                                    Theme.of(context).colorScheme.onPrimary,
+                                    Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                           ),
@@ -230,12 +153,84 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   );
-                },
-              ),
-            ],
-          ),
-        );
-      }),
+                }),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .where('type', isEqualTo: 'siswa')
+                  .where('pembimbing',
+                      isEqualTo:
+                          BlocProvider.of<AuthCubit>(context).state.userId ??
+                              '')
+                  .limit(4)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError || snapshot.data == null) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.data!.docs.isEmpty) {
+                  return Container(
+                    height: 80,
+                    color: Theme.of(context).colorScheme.surface,
+                    child: Center(
+                      child: Text(
+                        'Tidak ada siswa bimbingan',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
+                      ),
+                    ),
+                  );
+                }
+
+                return Container(
+                  color: Theme.of(context).colorScheme.surface,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      ...snapshot.data!.docs.map((DocumentSnapshot document) {
+                        String? imageUrl =
+                            (document.data() as Map<String, dynamic>)
+                                    .containsKey('image')
+                                ? document['image']
+                                : null;
+                        String? name = (document.data() as Map<String, dynamic>)
+                                .containsKey('name')
+                            ? document['name']
+                            : null;
+                        return SiswaItem(name: name, imageUrl: imageUrl);
+                      }),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 16, top: 16),
+                        child: Center(
+                          child: SizedBox(
+                            width: 280,
+                            height: 40,
+                            child: MyButton(
+                              onPressed: () => {},
+                              text: 'Lihat Seluruh Mahasiswa Bimbingan',
+                              verticalPadding: 0,
+                              horizontalPadding: 4,
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.primary,
+                              textColor:
+                                  Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
