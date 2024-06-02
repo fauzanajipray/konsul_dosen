@@ -345,7 +345,6 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                                           );
                                         } else if (promise.status ==
                                             'accepted') {
-                                          print("Room Id : ${promise.roomId}");
                                           context.push(
                                               Destination.chatPath.replaceAll(
                                                   ':id',

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
-import 'package:konsul_dosen/features/chat/bloc/chat_cubit.dart';
+import 'package:konsul_dosen/features/chat/bloc/room_cubit.dart';
 import 'package:konsul_dosen/features/chat/model/chat.dart';
 import 'package:konsul_dosen/features/chat/model/room.dart';
 import 'package:konsul_dosen/helpers/dialog.dart';
@@ -103,8 +103,22 @@ class _ChatPageState extends State<ChatPage> {
                             Chat chat = Chat.fromJson(chats[index])
                                 .copyWith(id: doc.id);
                             bool isMe = chat.userId == userId;
-
-                            return ChatItem(isMe: isMe, chat: chat);
+                            if (index == chats.length - 1) {
+                              return Column(
+                                children: [
+                                  const SizedBox(height: 32),
+                                  ChatItem(
+                                    isMe: isMe,
+                                    chat: chat,
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return ChatItem(
+                                isMe: isMe,
+                                chat: chat,
+                              );
+                            }
                           },
                         );
                       }),

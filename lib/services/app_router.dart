@@ -9,7 +9,7 @@ import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_state.dart';
 import 'package:konsul_dosen/features/auth/presentations/sign_in_page.dart';
 import 'package:konsul_dosen/features/auth/presentations/sign_up_page.dart';
-import 'package:konsul_dosen/features/chat/bloc/chat_cubit.dart';
+import 'package:konsul_dosen/features/chat/bloc/room_cubit.dart';
 import 'package:konsul_dosen/features/chat/presentations/chat_page.dart';
 import 'package:konsul_dosen/features/home/presentations/home_page.dart';
 import 'package:konsul_dosen/features/student/bloc/student_cubit.dart';
