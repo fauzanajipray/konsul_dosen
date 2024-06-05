@@ -55,9 +55,9 @@ void showDialogInfo(BuildContext mainContext, Function onYes,
 void showDialogConfirmation(
   BuildContext mainContext,
   Function onPositive, {
-  String title = 'Confirmation',
+  String title = 'Konfirmasi',
   String message = 'Are you sure you want to delete this data?',
-  String positiveText = 'Konfirmasi',
+  String positiveText = 'Ya',
   String minusText = 'Batal',
   ButtonStyle? buttonStyle1,
   ButtonStyle? buttonStyle2,

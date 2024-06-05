@@ -52,7 +52,7 @@ class _ChatPageState extends State<ChatPage> {
                   onSelected: (String result) {
                     switch (result) {
                       case 'End Chat':
-                        endChat();
+                        endChat(context, state.item);
                         break;
                     }
                   },
@@ -123,60 +123,73 @@ class _ChatPageState extends State<ChatPage> {
                         );
                       }),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: TextField(
-                            controller: _controller,
-                            decoration: InputDecoration(
-                              hintText: 'Ketik pesan anda...',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                if (state.item?.status == 'open')
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.surface,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: TextField(
+                              controller: _controller,
+                              decoration: InputDecoration(
+                                hintText: 'Ketik pesan anda...',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).colorScheme.surface,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 4.0,
-                                spreadRadius: 2.0,
-                              ),
-                            ],
+                        IconButton(
+                          icon: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context).colorScheme.surface,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4.0,
+                                  spreadRadius: 2.0,
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.send,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.send,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                          onPressed: () {
+                            if (_controller.text.isNotEmpty) {
+                              createMessage(context, userId, _controller.text);
+                              setState(() {
+                                _controller.clear();
+                                _scrollToBottom();
+                              });
+                            }
+                          },
                         ),
-                        onPressed: () {
-                          if (_controller.text.isNotEmpty) {
-                            createMessage(context, userId, _controller.text);
-                            setState(() {
-                              _controller.clear();
-                              _scrollToBottom();
-                            });
-                          }
-                        },
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                if (state.item?.status != 'open')
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.only(bottom: 16, top: 24),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.errorContainer,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text('Chat telah ditutup'),
+                    ),
+                  )
               ],
             ),
           ),
@@ -212,8 +225,44 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  void endChat() {
-    print('Akhiri Session');
+  void endChat(BuildContext context, Room? item) {
+    showDialogConfirmation(
+      context,
+      () async {
+        try {
+          String? roomId = item?.id;
+          String? promiseId = item?.promiseId;
+          if (roomId == null) {
+            throw Exception('Room ID is null');
+          }
+          if (promiseId == null) {
+            throw Exception('Promise ID is null');
+          }
+          await FirebaseFirestore.instance
+              .collection('rooms')
+              .doc(roomId)
+              .update({
+            'status': 'closed',
+          });
+          await FirebaseFirestore.instance
+              .collection('promises')
+              .doc(promiseId)
+              .update({
+            'status': 'completed',
+          });
+
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            initAsync();
+          });
+        } catch (e) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            showDialogMsg(context, 'Error : ${e.toString()}');
+          });
+        }
+      },
+      message: 'Apakah anda ingin mengakhiri chat?',
+      title: 'Konfirmasi',
+    );
   }
 
   void _scrollToBottom() {

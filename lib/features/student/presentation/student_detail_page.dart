@@ -231,8 +231,9 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                                             color:
                                                 getColorStatus(promise.status)),
                                       ),
-                                      subtitle: Text(
-                                          "${formatDateTimeCustom(promise.date, format: 'EEEE, d MMM yyyy HH:mm')}${promise.reason != null ? '\n${promise.reason}' : ''}"),
+                                      subtitle: Text(formatDateTimeCustom(
+                                          promise.date,
+                                          format: 'EEEE, d MMM yyyy HH:mm')),
                                       trailing: const Icon(
                                           Icons.keyboard_arrow_right),
                                       onTap: () {
@@ -344,12 +345,21 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                                             },
                                           );
                                         } else if (promise.status ==
-                                            'accepted') {
+                                                'accepted' ||
+                                            promise.status == 'completed') {
                                           context.push(
                                               Destination.chatPath.replaceAll(
                                                   ':id',
                                                   promise.roomId ?? ':id'),
                                               extra: promise.roomId);
+                                        } else if (promise.status ==
+                                            'rejected') {
+                                          showDialogInfo(
+                                            context,
+                                            () {},
+                                            message: promise.reason ?? '-',
+                                            title: 'Alasan',
+                                          );
                                         }
                                       },
                                     ),

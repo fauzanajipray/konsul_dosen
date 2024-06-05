@@ -211,7 +211,8 @@ class _HomePageState extends State<HomePage> {
                             width: 280,
                             height: 40,
                             child: MyButton(
-                              onPressed: () => {},
+                              onPressed: () =>
+                                  context.go(Destination.counselingPath),
                               text: 'Lihat Seluruh Mahasiswa Bimbingan',
                               verticalPadding: 0,
                               horizontalPadding: 4,
