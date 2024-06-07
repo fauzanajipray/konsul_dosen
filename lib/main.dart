@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_state.dart';
+import 'package:konsul_dosen/features/profile/bloc/profile_cubit.dart';
 import 'package:konsul_dosen/firebase_options.dart';
 import 'package:konsul_dosen/services/app_router.dart';
 import 'package:konsul_dosen/widgets/loading_progress.dart';
@@ -59,6 +60,7 @@ class _AppState extends State<App> {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => _authCubit),
+          BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
         ],
         child: BlocListener<AuthCubit, AuthState>(
           listenWhen: (previousState, state) {

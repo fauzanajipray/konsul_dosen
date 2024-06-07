@@ -48,22 +48,23 @@ class _ChatPageState extends State<ChatPage> {
             appBar: AppBar(
               title: const Text('Chat'),
               actions: [
-                PopupMenuButton<String>(
-                  onSelected: (String result) {
-                    switch (result) {
-                      case 'End Chat':
-                        endChat(context, state.item);
-                        break;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry<String>>[
-                    const PopupMenuItem<String>(
-                      value: 'End Chat',
-                      child: Text('Akhiri Sesi'),
-                    ),
-                  ],
-                )
+                if (state.item?.status == 'open')
+                  PopupMenuButton<String>(
+                    onSelected: (String result) {
+                      switch (result) {
+                        case 'End Chat':
+                          endChat(context, state.item);
+                          break;
+                      }
+                    },
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                      const PopupMenuItem<String>(
+                        value: 'End Chat',
+                        child: Text('Akhiri Sesi'),
+                      ),
+                    ],
+                  )
               ],
             ),
             backgroundColor: Theme.of(context).colorScheme.primary,
@@ -251,9 +252,7 @@ class _ChatPageState extends State<ChatPage> {
             'status': 'completed',
           });
 
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            initAsync();
-          });
+          initAsync();
         } catch (e) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             showDialogMsg(context, 'Error : ${e.toString()}');

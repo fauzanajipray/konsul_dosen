@@ -8,7 +8,7 @@ class StudentCubit extends Cubit<DataState<AllUser>> {
   StudentCubit() : super(const DataState());
 
   Future<void> get(String uid) async {
-    emit(state.copyWith(status: LoadStatus.loading));
+    emit(const DataState(status: LoadStatus.loading));
     try {
       final userDoc =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
@@ -16,7 +16,7 @@ class StudentCubit extends Cubit<DataState<AllUser>> {
       Map<String, dynamic> userData = userDoc.data() ?? {};
       AllUser alluser = AllUser.fromJson(userData);
 
-      emit(state.copyWith(
+      emit(DataState(
           status: LoadStatus.success,
           data: userData,
           item: alluser.copyWith(id: uid)));

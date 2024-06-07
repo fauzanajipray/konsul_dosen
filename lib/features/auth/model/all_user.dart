@@ -9,6 +9,7 @@ class AllUser {
   final String? type;
   final String? phoneNumber;
   final String? pembimbing;
+  final String? imageUrl;
 
   AllUser({
     this.id,
@@ -19,6 +20,7 @@ class AllUser {
     this.type,
     this.phoneNumber,
     this.pembimbing,
+    this.imageUrl,
   });
 
   AllUser copyWith({
@@ -30,6 +32,7 @@ class AllUser {
     String? type,
     String? phoneNumber,
     String? pembimbing,
+    String? imageUrl,
   }) {
     return AllUser(
       id: id ?? this.id,
@@ -40,6 +43,7 @@ class AllUser {
       type: type ?? this.type,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       pembimbing: pembimbing ?? this.pembimbing,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 
@@ -57,6 +61,7 @@ class AllUser {
         type: json["type"] ?? '',
         phoneNumber: json["number"] ?? '',
         pembimbing: json["pembimbing"] ?? '',
+        imageUrl: json["imageUrl"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -68,5 +73,6 @@ class AllUser {
         "type": type,
         "number": phoneNumber,
         "pembimbing": pembimbing,
+        "imageUrl": imageUrl,
       };
 }

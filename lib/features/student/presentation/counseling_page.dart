@@ -6,7 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_cubit.dart';
 import 'package:konsul_dosen/features/auth/cubit/auth_state.dart';
+import 'package:konsul_dosen/features/profile/bloc/profile_cubit.dart';
+import 'package:konsul_dosen/features/profile/model/profile.dart';
 import 'package:konsul_dosen/services/app_router.dart';
+import 'package:konsul_dosen/utils/data_state.dart';
 import 'package:konsul_dosen/widgets/my_button.dart';
 
 class CounselingPage extends StatefulWidget {
@@ -28,66 +31,76 @@ class _CounselingPageState extends State<CounselingPage> {
         child: Column(
           children: [
             BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-                child: Container(
-                  margin: const EdgeInsets.all(16),
-                  padding: const EdgeInsets.all(16),
+              return BlocBuilder<ProfileCubit, DataState<Profile>>(
+                  builder: (context, stateProfile) {
+                String? imageUrl = stateProfile.item?.imageUrl;
+                imageUrl = (imageUrl == '') ? null : imageUrl;
+                return Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
+                    color: Theme.of(context).colorScheme.surface,
                   ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 60.0,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2.0),
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                        child: ClipOval(
-                          child: Image.asset(
-                            'assets/images/user.png',
-                            fit: BoxFit.cover,
+                  child: Container(
+                    margin: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 60.0,
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2.0),
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundImage: imageUrl != null
+                                ? NetworkImage(imageUrl)
+                                    as ImageProvider<Object>
+                                : const AssetImage('assets/images/user.png')
+                                    as ImageProvider<Object>,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.outline,
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: TextSpan(children: [
-                              const TextSpan(
-                                text: "Hai, ",
-                                style: TextStyle(fontWeight: FontWeight.normal),
-                              ),
-                              TextSpan(
-                                text: "${state.name}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ]),
-                          ),
-                          Text(
-                            "Bagaimana perasaan mu hari ini? ",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              // fontSize: 14,
-                              fontWeight: FontWeight.normal,
+                        const SizedBox(width: 8),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: TextSpan(children: [
+                                const TextSpan(
+                                  text: "Hai, ",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.normal),
+                                ),
+                                TextSpan(
+                                  text: "${state.name}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ]),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            Text(
+                              "Bagaimana perasaan mu hari ini? ",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                // fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
+                );
+              });
             }),
             Container(
               color: Theme.of(context).colorScheme.primary,
@@ -158,8 +171,8 @@ class _CounselingPageState extends State<CounselingPage> {
                       String? uid = doc?.id;
 
                       String? imageUrl = (doc?.data() as Map<String, dynamic>)
-                              .containsKey('image')
-                          ? doc!['image']
+                              .containsKey('imageUrl')
+                          ? doc!['imageUrl']
                           : null;
                       String? name = (doc?.data() as Map<String, dynamic>)
                               .containsKey('name')

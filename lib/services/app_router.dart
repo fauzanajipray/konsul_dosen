@@ -12,6 +12,8 @@ import 'package:konsul_dosen/features/auth/presentations/sign_up_page.dart';
 import 'package:konsul_dosen/features/chat/bloc/room_cubit.dart';
 import 'package:konsul_dosen/features/chat/presentations/chat_page.dart';
 import 'package:konsul_dosen/features/home/presentations/home_page.dart';
+import 'package:konsul_dosen/features/profile/presentations/profile_page.dart';
+import 'package:konsul_dosen/features/profile/presentations/update_profile_page.dart';
 import 'package:konsul_dosen/features/student/bloc/student_cubit.dart';
 import 'package:konsul_dosen/features/student/presentation/add_schedule_page.dart';
 import 'package:konsul_dosen/features/student/presentation/counseling_page.dart';
@@ -79,10 +81,10 @@ class AppRouter {
             navigatorKey: tab4,
             routes: [
               GoRoute(
-                path: Destination.menu4Path,
+                path: Destination.profilePath,
                 pageBuilder: (context, state) {
                   return getPage(
-                    child: const HomePage(),
+                    child: const ProfilePage(),
                     state: state,
                   );
                 },
@@ -172,6 +174,16 @@ class AppRouter {
           return const ErrorDataNotFoundPage('ID Room is NULL');
         },
       ),
+      GoRoute(
+        // parentNavigatorKey: tab5,
+        path: Destination.updateProfilePath,
+        pageBuilder: (context, state) {
+          return getPage(
+            child: const UpdateProfilePage(),
+            state: state,
+          );
+        },
+      ),
     ];
 
     _router = GoRouter(
@@ -244,6 +256,8 @@ class Destination {
   static const String chatPath = '/chat/:id';
 
   static const String menu4Path = '/menu4Path';
+  static const String profilePath = '/profile';
+  static const String updateProfilePath = '/profile/update';
 
   static const String addSchedulePath = '/add-schedule';
 }

@@ -41,6 +41,10 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             label: 'Konseling',
             icon: Icon(Icons.document_scanner),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
       ),
     );

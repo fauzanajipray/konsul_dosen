@@ -42,6 +42,8 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
       create: (context) => AppointmentCubit(),
       child: BlocBuilder<StudentCubit, DataState<AllUser>>(
           builder: (context, state) {
+        String? imageUrl = state.item?.imageUrl;
+        imageUrl = (imageUrl == '') ? null : imageUrl;
         return BlocConsumer<AppointmentCubit, DataState>(
           listener: (context, stateUpdate) {
             if (stateUpdate.status == LoadStatus.success) {
@@ -90,11 +92,21 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                                           .colorScheme
                                           .tertiary,
                                     ),
-                                    child: ClipOval(
-                                      child: Image.asset(
-                                        'assets/images/user.png',
-                                        fit: BoxFit.cover,
-                                      ),
+                                    // child: ClipOval(
+                                    //   child: Image.asset(
+                                    //     'assets/images/user.png',
+                                    //     fit: BoxFit.cover,
+                                    //   ),
+                                    // ),
+                                    child: CircleAvatar(
+                                      radius: 80,
+                                      backgroundImage: imageUrl != null
+                                          ? NetworkImage(imageUrl)
+                                              as ImageProvider<Object>
+                                          : const AssetImage(
+                                              'assets/images/user.png'),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.outline,
                                     ),
                                   ),
                                   const SizedBox(width: 8),

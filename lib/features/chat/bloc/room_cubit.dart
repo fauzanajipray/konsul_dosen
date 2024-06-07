@@ -16,7 +16,7 @@ class RoomCubit extends Cubit<DataState<Room>> {
       Map<String, dynamic> userData = userDoc.data() ?? {};
       Room room = Room.fromJson(userData);
 
-      emit(state.copyWith(
+      emit(DataState(
           status: LoadStatus.success,
           data: userData,
           item: room.copyWith(id: uid)));
